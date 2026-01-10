@@ -8,4 +8,7 @@ export default defineConfig({
   outDir: "dist",
   publicDir: "static",
   entrypointsDir: "entrypoints",
+  manifest: {
+    action: {}
+  }
 });
