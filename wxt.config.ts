@@ -7,5 +7,5 @@ export default defineConfig({
   modulesDir: "wxt-modules",
   outDir: "dist",
   publicDir: "static",
-  entrypointsDir: "entries",
+  entrypointsDir: "entrypoints",
 });
