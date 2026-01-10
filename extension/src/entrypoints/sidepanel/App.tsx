@@ -1,7 +1,7 @@
 import { useState } from 'react';
-import Login from '../pages/pages/Login';
-import ProfileInput from '../pages/pages/ProfileInput';
-import Chart from '../pages/pages/Chart';
+import Login from './pages/Login';
+import ProfileInput from './pages/ProfileInput';
+import Chart from './pages/Chart';
 import '../../styles/globals.css';
 
 type Page = 'login' | 'id' | 'chart';
