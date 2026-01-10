@@ -1,4 +1,4 @@
-import { Button } from "@/components/ui/button"
+import { Button } from "extension/src/components/ui/button"
 import {
   Card,
   CardAction,
@@ -7,9 +7,9 @@ import {
   CardFooter,
   CardHeader,
   CardTitle,
-} from "@/components/ui/card"
-import { Input } from "@/components/ui/input"
-import { Label } from "@/components/ui/label"
+} from "extension/src/components/ui/card"
+import { Input } from "extension/src/components/ui/input"
+import { Label } from "extension/src/components/ui/label"
 
 export function CardDemo() {
   return (

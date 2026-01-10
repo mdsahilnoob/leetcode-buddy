@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { CardDemo } from '@/components/card';
+import { CardDemo } from 'extension/src/components/card';
 import reactLogo from '@/assets/react.svg';
 import wxtLogo from '/wxt.svg';
 import './App.css';
