@@ -13,7 +13,7 @@ import chartRoutes from "./routes/chart.route.js";
 const app = express();
 
 const allowedOrigins = config.nodeEnv === 'production'
-  ? [config.frontendUrl] // Only allow specific frontend in production
+  ? ['chrome-extension://', 'https://']
   : ['http://localhost:3000', 'http://localhost:5173', 'chrome-extension://*'];
 
 app.use(cors({
@@ -24,7 +24,8 @@ app.use(cors({
       return callback(null, true);
     }
     
-    if (allowedOrigins.some(allowed => origin.startsWith(allowed.replace('*', '')))) {
+    // In production, allow chrome-extension:// and https:// origins
+    if (origin.startsWith('chrome-extension://') || origin.startsWith('https://')) {
       return callback(null, true);
     }
     
