@@ -81,8 +81,14 @@ app.get('/', (req, res) => {
   });
 });
 
-app.listen(config.port, () => {
-  console.log(`LeetCode Buddy API running on http://localhost:${config.port}`);
-  console.log(`Environment: ${config.nodeEnv}`);
-  console.log(`Google OAuth: ${config.googleClientId ? 'Configured' : 'Not configured'}`);
-});
+// Export for Vercel serverless
+export default app;
+
+// Local development server
+if (process.env.NODE_ENV !== 'production') {
+  app.listen(config.port, () => {
+    console.log(`LeetCode Buddy API running on http://localhost:${config.port}`);
+    console.log(`Environment: ${config.nodeEnv}`);
+    console.log(`Google OAuth: ${config.googleClientId ? 'Configured' : 'Not configured'}`);
+  });
+}
