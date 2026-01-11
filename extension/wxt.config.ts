@@ -9,6 +9,21 @@ export default defineConfig({
   publicDir: "static",
   entrypointsDir: "entrypoints",
   manifest: {
-    action: {}
+    name: 'LeetCode Buddy',
+    description: 'Compare LeetCode profiles side-by-side with detailed stats and difficulty breakdown',
+    version: '1.0.0',
+    action: {
+      default_title: 'LeetCode Buddy - Compare Profiles'
+    },
+    permissions: [
+      'sidePanel',
+      'tabs',
+      'scripting',
+      'storage'
+    ],
+    host_permissions: [
+      '*://*.google.com/*',
+      'http://localhost/*'
+    ]
   }
 });
