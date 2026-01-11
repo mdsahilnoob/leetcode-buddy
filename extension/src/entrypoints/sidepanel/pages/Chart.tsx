@@ -17,42 +17,55 @@ import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowLeft } from "lucide-react";
 import { profileAPI } from '@/services/api';
 
-const chartData = [
-  { month: "January", desktop: 345, mobile: 210 },
-  { month: "February", desktop: 524, mobile: 380 },
-  { month: "March", desktop: 417, mobile: 310 },
-  { month: "April", desktop: 321, mobile: 480 },
-  { month: "May", desktop: 412, mobile: 530 },
-  { month: "June", desktop: 598, mobile: 450 },
-  { month: "July", desktop: 412, mobile: 290 },
-  { month: "August", desktop: 643, mobile: 460 },
-  { month: "September", desktop: 489, mobile: 390 },
-  { month: "October", desktop: 576, mobile: 470 },
-  { month: "November", desktop: 787, mobile: 620 },
-  { month: "December", desktop: 298, mobile: 250 },
-];
-
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
-    color: "var(--secondary-foreground)",
+  user1: {
+    label: "User 1",
+    color: "hsl(142, 71%, 45%)",
   },
-  mobile: {
-    label: "Mobile",
-    color: "var(--chart-2)",
+  user2: {
+    label: "User 2",
+    color: "hsl(212, 92%, 55%)",
   },
 } satisfies ChartConfig;
 
-export function PartialLineChart() {
+interface PartialLineChartProps {
+  profile1: UserStats;
+  profile2: UserStats;
+}
+
+export function PartialLineChart({ profile1, profile2 }: PartialLineChartProps) {
+  const chartData = [
+    { 
+      difficulty: "Easy", 
+      user1: profile1.easy, 
+      user2: profile2.easy 
+    },
+    { 
+      difficulty: "Medium", 
+      user1: profile1.medium, 
+      user2: profile2.medium 
+    },
+    { 
+      difficulty: "Hard", 
+      user1: profile1.hard, 
+      user2: profile2.hard 
+    },
+    { 
+      difficulty: "Total", 
+      user1: profile1.solved, 
+      user2: profile2.solved 
+    },
+  ];
+
   const [DasharrayCalculator, lineDasharrays] = useDynamicDasharray({
-    splitIndex: chartData.length - 2,
+    splitIndex: chartData.length - 1,
   });
 
   return (
     <Card className="bg-[#161b22] border-[#30363d] shadow-lg">
       <CardHeader>
         <CardTitle className="text-white text-xl">
-          Monthly Progress Comparison
+          Difficulty Comparison
           <Badge
             variant="outline"
             className="text-green-400 bg-green-500/10 border-green-500/30 ml-2"
@@ -61,7 +74,7 @@ export function PartialLineChart() {
             <span>Live Data</span>
           </Badge>
         </CardTitle>
-        <CardDescription className="text-[#8b949e] text-base">Problems solved over time</CardDescription>
+        <CardDescription className="text-[#8b949e] text-base">Problems solved by difficulty</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer className="h-54 w-full" config={chartConfig}>
@@ -75,11 +88,10 @@ export function PartialLineChart() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="difficulty"
               tickLine={false}
               axisLine={false}
               tickMargin={8}
-              tickFormatter={(value) => value.slice(0, 3)}
             />
             <ChartTooltip
               cursor={false}
@@ -405,7 +417,7 @@ export default function Chart({ user1, user2, onBack }: ChartProps) {
         </div>
       </div>
 
-      <PartialLineChart />
+      <PartialLineChart profile1={profile1} profile2={profile2} />
     </div>
   );
 }
