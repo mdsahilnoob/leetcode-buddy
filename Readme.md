@@ -110,7 +110,7 @@ Extension dev server will run on `http://localhost:3000`
 4. Select the folder: `extension/dist/chrome-mv3-dev`
 5. The extension icon should appear in your toolbar
 
-## Usage 📖
+## Usage
 
 1. Click the **LeetCode Buddy** extension icon in Chrome
 2. Side panel opens on the right
