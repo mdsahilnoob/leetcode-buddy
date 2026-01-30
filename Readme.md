@@ -81,6 +81,12 @@ npm install
 pnpm run dev
 ```
 
+3. finding errors:
+```bash
+web-ext lint
+pnpm lint
+```
+
 Backend will run on `http://localhost:3001`
 
 ### Extension Setup
