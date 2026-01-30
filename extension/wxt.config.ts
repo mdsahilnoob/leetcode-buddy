@@ -22,6 +22,13 @@ export default defineConfig({
     ],
     host_permissions: [
       'http://localhost/*'
-    ]
+    ],
+    browser_specific_settings: {
+      gecko: {
+        id: 'leetcode-buddy@example.com',
+        strict_min_version: '109.0',
+        data_collection_permissions: false
+      }
+    }
   }
 });
