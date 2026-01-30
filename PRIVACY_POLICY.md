@@ -86,7 +86,6 @@ The extension requires the following Chrome permissions:
 - **storage**: To save your authentication token and preferences locally
 - **sidePanel**: To display the comparison interface in Chrome's side panel
 - **tabs**: To interact with the current tab when needed
-- **scripting**: To inject content scripts for enhanced functionality
 - **host_permissions** (`*.google.com/*`): For Google OAuth authentication
 - **host_permissions** (`localhost/*`): For local development (removed in production builds)
 

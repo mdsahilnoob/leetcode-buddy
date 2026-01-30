@@ -18,7 +18,6 @@ export default defineConfig({
     permissions: [
       'sidePanel',
       'tabs',
-      'scripting',
       'storage'
     ],
     host_permissions: [
