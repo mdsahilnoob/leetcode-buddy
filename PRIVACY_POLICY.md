@@ -8,15 +8,7 @@ LeetCode Buddy ("we", "our", or "the extension") is a Chrome extension that allo
 
 ## Information We Collect
 
-### 1. Authentication Information
-
-- **Google Account Data**: When you choose to sign in with Google, we collect:
-  - Your email address
-  - Your name
-  - Your Google profile picture
-- **JWT Tokens**: We store authentication tokens to maintain your login session
-
-### 2. LeetCode Profile Data
+### 1. LeetCode Profile Data
 
 - **Public LeetCode Statistics**: We fetch publicly available information from LeetCode profiles you choose to compare, including:
   - Username
@@ -25,14 +17,13 @@ LeetCode Buddy ("we", "our", or "the extension") is a Chrome extension that allo
   - Ranking information
   - Acceptance rates
 
-### 3. Usage Data
+### 2. Usage Data
 
 - **Comparison History**: Usernames you've compared (stored locally in your browser)
 - **Search History**: Profile searches you've performed
 
-### 4. Local Storage
+### 3. Local Storage
 
-- Authentication tokens
 - User preferences
 - Cached profile data
 
@@ -40,33 +31,22 @@ LeetCode Buddy ("we", "our", or "the extension") is a Chrome extension that allo
 
 We use the collected information to:
 
-- Authenticate your identity via Google OAuth 2.0
 - Fetch and display LeetCode profile statistics
 - Compare multiple LeetCode profiles side-by-side
-- Maintain your session across browsing sessions
 - Improve the extension's functionality and user experience
 
 ## Data Storage and Security
 
 ### Local Storage
 
-- Authentication tokens are stored securely in Chrome's local storage
+- User preferences are stored locally on your device
 - Profile comparison history is stored locally on your device
-- No sensitive data is transmitted without encryption
 
 ### Backend Storage
 
-- We use JWT (JSON Web Tokens) for secure authentication
-- User sessions are managed through secure, HTTP-only cookies
 - All API communications use HTTPS encryption
 
 ## Third-Party Services
-
-### Google OAuth 2.0
-
-- We use Google's authentication service for secure login
-- Google's privacy policy applies: https://policies.google.com/privacy
-- We only request necessary permissions (email, profile)
 
 ### LeetCode
 
@@ -83,10 +63,9 @@ We use the collected information to:
 
 The extension requires the following Chrome permissions:
 
-- **storage**: To save your authentication token and preferences locally
+- **storage**: To save your preferences locally
 - **sidePanel**: To display the comparison interface in Chrome's side panel
 - **tabs**: To interact with the current tab when needed
-- **host_permissions** (`*.google.com/*`): For Google OAuth authentication
 - **host_permissions** (`localhost/*`): For local development (removed in production builds)
 
 ## Data Sharing

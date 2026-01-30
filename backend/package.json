@@ -1,7 +1,7 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "LeetCode Buddy Backend with Google OAuth & JWT",
+  "description": "LeetCode Buddy Backend with JWT",
   "main": "dist/server.js",
   "type": "module",
   "scripts": {
@@ -19,20 +19,14 @@
     "cors": "^2.8.5",
     "dotenv": "^16.4.7",
     "express": "^5.2.1",
-    "express-session": "^1.18.2",
-    "jsonwebtoken": "^9.0.2",
-    "passport": "^0.7.0",
-    "passport-google-oauth20": "^2.0.0"
+    "jsonwebtoken": "^9.0.2"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
     "@types/cors": "^2.8.19",
     "@types/express": "^5.0.6",
-    "@types/express-session": "^1.18.2",
     "@types/jsonwebtoken": "^9.0.7",
     "@types/node": "^22.10.5",
-    "@types/passport": "^1.0.17",
-    "@types/passport-google-oauth20": "^2.0.17",
     "ts-node": "^10.9.2",
     "tsx": "^4.21.0",
     "typescript": "^5.7.3"

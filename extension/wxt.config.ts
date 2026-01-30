@@ -21,7 +21,6 @@ export default defineConfig({
       'storage'
     ],
     host_permissions: [
-      '*://*.google.com/*',
       'http://localhost/*'
     ]
   }

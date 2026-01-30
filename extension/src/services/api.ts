@@ -8,69 +8,6 @@ const getToken = async (): Promise<string | null> => {
   return localStorage.getItem('token');
 };
 
-export const authAPI = {
-  loginWithGoogle: () => {
-    const popup = window.open(
-      `${API_BASE_URL}/auth/google`,
-      'Google Login',
-      'width=500,height=600'
-    );
-
-    return new Promise((resolve, reject) => {
-      window.addEventListener('message', async (event) => {
-        if (event.data.type === 'AUTH_SUCCESS') {
-          const { token, user } = event.data;
-          
-          if (typeof chrome !== 'undefined' && chrome.storage) {
-            await chrome.storage.local.set({ token, user });
-          } else {
-            localStorage.setItem('token', token);
-            localStorage.setItem('user', JSON.stringify(user));
-          }
-          
-          resolve({ token, user });
-        }
-      });
-
-      const checkClosed = setInterval(() => {
-        if (popup?.closed) {
-          clearInterval(checkClosed);
-          reject(new Error('Authentication popup was closed'));
-        }
-      }, 1000);
-    });
-  },
-
-  getCurrentUser: async () => {
-    const token = await getToken();
-    if (!token) throw new Error('No token found');
-
-    const response = await fetch(`${API_BASE_URL}/auth/user`, {
-      headers: {
-        'Authorization': `Bearer ${token}`,
-      },
-    });
-
-    if (!response.ok) throw new Error('Failed to get user');
-    return response.json();
-  },
-
-  logout: async () => {
-    const response = await fetch(`${API_BASE_URL}/auth/logout`, {
-      method: 'POST',
-    });
-
-    if (typeof chrome !== 'undefined' && chrome.storage) {
-      await chrome.storage.local.remove(['token', 'user']);
-    } else {
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-    }
-
-    return response.json();
-  },
-};
-
 export const profileAPI = {
   getProfile: async (username: string) => {
     const response = await fetch(`${API_BASE_URL}/api/profile/${username}`);

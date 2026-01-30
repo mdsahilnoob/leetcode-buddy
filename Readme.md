@@ -10,7 +10,6 @@ A Chrome extension that lets you compare LeetCode profiles side-by-side with det
 - **Detailed Statistics**: View total problems solved, difficulty breakdown (Easy/Medium/Hard), rankings, and acceptance rates
 - **Visual Charts**: Interactive line charts showing difficulty-based comparison
 - **Side Panel UI**: Clean, dark-themed interface that opens in Chrome's side panel
-- **Google OAuth**: Optional authentication with Google (or skip for guest access)
 - **Real-time Data**: Fetches live data from LeetCode profiles
 
 ## Tech Stack
@@ -28,8 +27,7 @@ A Chrome extension that lets you compare LeetCode profiles side-by-side with det
 
 - **Runtime**: Node.js + Express
 - **Language**: TypeScript
-- **Authentication**: Passport.js (Google OAuth 2.0), JWT
-- **Session Management**: express-session
+- **Authentication**: JWT
 - **Deployment**: Vercel (Serverless)
 
 ## Project Structure
@@ -52,7 +50,6 @@ leetcode-buddy/
 │   └── wxt.config.ts              # Extension configuration
 │
 └── backend/           # Express API server
-    ├── auth/                      # Passport configuration
     ├── config/                    # Environment config
     ├── controllers/               # Request handlers
     ├── middlewares/               # Auth middleware
@@ -68,7 +65,6 @@ leetcode-buddy/
 
 - Node.js 18+ and pnpm
 - Chrome browser
-- Google Cloud Console account (for OAuth)
 
 ### Backend Setup
 
@@ -116,7 +112,7 @@ Extension dev server will run on `http://localhost:3000`
 
 1. Click the **LeetCode Buddy** extension icon in Chrome
 2. Side panel opens on the right
-3. Click **Continue without login** (or login with Google)
+3. Click **Get Started**
 4. Enter two LeetCode usernames (e.g., `tourist` and `jiangly`)
 5. Click **Compare**
 6. View detailed comparison with:
@@ -143,13 +139,6 @@ pnpm run dev           # Start dev server with tsx watch
 ```
 
 ## Features in Detail
-
-### Authentication
-
-- Google OAuth 2.0 login
-- Guest mode (skip login)
-- JWT-based session management
-- Secure token storage in Chrome storage
 
 ### Profile Comparison
 
