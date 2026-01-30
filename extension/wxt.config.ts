@@ -26,8 +26,7 @@ export default defineConfig({
     browser_specific_settings: {
       gecko: {
         id: 'leetcode-buddy@example.com',
-        strict_min_version: '109.0',
-        data_collection_permissions: false
+        strict_min_version: '142.0'
       }
     }
   }
