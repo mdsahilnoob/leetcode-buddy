@@ -54,11 +54,6 @@ We use the collected information to:
 - No private LeetCode data is accessed
 - We do not store your LeetCode credentials
 
-### Hosting
-
-- Backend API is hosted on Vercel
-- Vercel's privacy policy applies: https://vercel.com/legal/privacy-policy
-
 ## Permissions Explained
 
 The extension requires the following Chrome permissions:
