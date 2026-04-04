@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { authenticateToken, AuthRequest } from '../middlewares/auth.middleware.js';
+import { authenticateToken } from '../middlewares/auth.middleware.js';
 import { scrapeLeetCodeProfile } from '../scrapper.js';
 
-const router = Router();
+const router: Router = Router();
 
 interface LeetCodeStats {
   username: string;
@@ -15,7 +15,7 @@ interface LeetCodeStats {
 }
 
 // Compare two LeetCode profiles (protected route)
-router.post('/compare', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/compare', authenticateToken, async (req, res) => {
   const { username1, username2 } = req.body;
 
   if (!username1 || !username2) {

@@ -1,10 +1,21 @@
 const API_BASE_URL = 'https://leetcode-buddy-z74p.vercel.app';
 
+type ChromeStorageLike = {
+  storage?: {
+    local?: {
+      get: (key: string) => Promise<{ token?: string }>;
+    };
+  };
+};
+
 const getToken = async (): Promise<string | null> => {
-  if (typeof chrome !== 'undefined' && chrome.storage) {
-    const result = await chrome.storage.local.get('token');
+  const chromeApi = (globalThis as { chrome?: ChromeStorageLike }).chrome;
+
+  if (chromeApi?.storage?.local?.get) {
+    const result = await chromeApi.storage.local.get('token');
     return result.token || null;
   }
+
   return localStorage.getItem('token');
 };
 

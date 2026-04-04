@@ -6,7 +6,7 @@ import profileRoutes from "./routes/profile.route.js";
 import historyRoutes from "./routes/history.route.js";
 import chartRoutes from "./routes/chart.route.js";
 
-const app = express();
+const app: express.Express = express();
 
 const allowedOrigins = config.nodeEnv === 'production'
   ? ['chrome-extension://', 'https://']

@@ -1,8 +1,7 @@
 import { Router } from 'express';
-import { AuthRequest } from '../middlewares/auth.middleware.js';
 import { scrapeLeetCodeProfile } from '../scrapper.js';
 
-const router = Router();
+const router: Router = Router();
 
 interface ProfileData {
   username: string;

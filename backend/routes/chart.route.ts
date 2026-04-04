@@ -1,8 +1,8 @@
 import { Router } from 'express';
-import { optionalAuth, AuthRequest } from '../middlewares/auth.middleware.js';
+import { optionalAuth } from '../middlewares/auth.middleware.js';
 import { scrapeLeetCodeProfile } from '../scrapper.js';
 
-const router = Router();
+const router: Router = Router();
 
 interface MonthlyData {
   month: string;
@@ -78,7 +78,7 @@ const generateChartData = async (username1: string, username2: string): Promise<
 };
 
 // Get chart data for comparison
-router.get('/chart-data', optionalAuth, async (req: AuthRequest, res) => {
+router.get('/chart-data', optionalAuth, async (req, res) => {
   const { user1, user2 } = req.query;
 
   if (!user1 || !user2) {

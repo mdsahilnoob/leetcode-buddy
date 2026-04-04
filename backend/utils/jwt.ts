@@ -8,8 +8,8 @@ export const generateToken = (userId: string, email: string): string => {
     email,
   };
 
-  return jwt.sign(payload, config.jwtSecret as string, {
-    expiresIn: config.jwtExpiration as string,
+  return jwt.sign(payload, config.jwtSecret, {
+    expiresIn: config.jwtExpiration as jwt.SignOptions['expiresIn'],
   });
 };
 

@@ -1,7 +1,7 @@
 import { Router } from 'express';
-import { authenticateToken, AuthRequest } from '../middlewares/auth.middleware.js';
+import { authenticateToken } from '../middlewares/auth.middleware.js';
 
-const router = Router();
+const router: Router = Router();
 
 interface Comparison {
   id: string;
@@ -15,7 +15,7 @@ interface Comparison {
 const comparisonHistory = new Map<string, Comparison[]>();
 
 // Get user's comparison history
-router.get('/history', authenticateToken, async (req: AuthRequest, res) => {
+router.get('/history', authenticateToken, async (req, res) => {
   const userId = req.user?.userId;
 
   if (!userId) {
@@ -27,7 +27,7 @@ router.get('/history', authenticateToken, async (req: AuthRequest, res) => {
 });
 
 // Save comparison to history
-router.post('/history', authenticateToken, async (req: AuthRequest, res) => {
+router.post('/history', authenticateToken, async (req, res) => {
   const { user1, user2 } = req.body;
   const userId = req.user?.userId;
   const userEmail = req.user?.email;
@@ -65,7 +65,7 @@ router.post('/history', authenticateToken, async (req: AuthRequest, res) => {
 });
 
 // Delete comparison from history
-router.delete('/history/:id', authenticateToken, async (req: AuthRequest, res) => {
+router.delete('/history/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   const userId = req.user?.userId;
 
@@ -81,7 +81,7 @@ router.delete('/history/:id', authenticateToken, async (req: AuthRequest, res) =
 });
 
 // Clear all history
-router.delete('/history', authenticateToken, async (req: AuthRequest, res) => {
+router.delete('/history', authenticateToken, async (req, res) => {
   const userId = req.user?.userId;
 
   if (!userId) {
