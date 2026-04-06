@@ -1,8 +1,13 @@
 import { useState } from 'react';
-import { profileAPI } from '@/services/api';
+import { profileAPI, type UserStats } from '@/services/api';
 
 interface ProfileInputProps {
-  onCompare: (user1: string, user2: string) => void;
+  onCompare: (payload: {
+    user1: string;
+    user2: string;
+    profile1: UserStats;
+    profile2: UserStats;
+  }) => void;
 }
 
 export default function ProfileInput({ onCompare }: ProfileInputProps) {
@@ -14,18 +19,21 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user1 || !user2) return;
+    const trimmedUser1 = user1.trim();
+    const trimmedUser2 = user2.trim();
+    if (!trimmedUser1 || !trimmedUser2) return;
     
     setLoading(true);
     setError(null);
 
     try {
       // Validate both usernames exist
-      await Promise.all([
-        profileAPI.getProfile(user1),
-        profileAPI.getProfile(user2)
+      const [profile1, profile2] = await Promise.all([
+        profileAPI.getProfile(trimmedUser1),
+        profileAPI.getProfile(trimmedUser2)
       ]);
       
-      onCompare(user1, user2);
+      onCompare({ user1: trimmedUser1, user2: trimmedUser2, profile1, profile2 });
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to fetch profiles. Please check usernames.');
     } finally {
@@ -103,11 +111,12 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
             {/* Submit Button */}
             <button
               type="submit"
-              disabled={!user1 || !user2}
+              disabled={!user1 || !user2 || loading}
               className="w-full bg-[#238636] hover:bg-[#2ea043] text-white py-3 px-8 rounded-md font-medium text-base transition-colors mt-6 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#238636]"
             >
-              Compare Profiles
+              {loading ? 'Comparing...' : 'Compare Profiles'}
             </button>
+            {error && <p className="text-red-400 text-sm">{error}</p>}
           </form>
         </div>
       </div>

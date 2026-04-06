@@ -1,4 +1,14 @@
 const API_BASE_URL = 'https://leetcode-buddy-z74p.vercel.app';
+const PROFILE_CACHE_TTL_MS = 5 * 60 * 1000;
+
+export interface UserStats {
+  username: string;
+  solved: number;
+  easy: number;
+  medium: number;
+  hard: number;
+  ranking: number;
+}
 
 type ChromeStorageLike = {
   storage?: {
@@ -19,11 +29,46 @@ const getToken = async (): Promise<string | null> => {
   return localStorage.getItem('token');
 };
 
+const profileCache = new Map<string, { data: UserStats; expiresAt: number }>();
+const inFlightProfileRequests = new Map<string, Promise<UserStats>>();
+
 export const profileAPI = {
-  getProfile: async (username: string) => {
-    const response = await fetch(`${API_BASE_URL}/api/profile/${username}`);
-    if (!response.ok) throw new Error('Failed to fetch profile');
-    return response.json();
+  getProfile: async (username: string): Promise<UserStats> => {
+    const key = username.trim().toLowerCase();
+    const now = Date.now();
+    const cached = profileCache.get(key);
+
+    if (cached && cached.expiresAt > now) {
+      return cached.data;
+    }
+
+    const existingRequest = inFlightProfileRequests.get(key);
+    if (existingRequest) {
+      return existingRequest;
+    }
+
+    const request = (async () => {
+      const response = await fetch(`${API_BASE_URL}/api/profile/${encodeURIComponent(username)}`);
+      if (!response.ok) throw new Error('Failed to fetch profile');
+      const data = (await response.json()) as UserStats;
+      profileCache.set(key, { data, expiresAt: Date.now() + PROFILE_CACHE_TTL_MS });
+      return data;
+    })();
+
+    inFlightProfileRequests.set(key, request);
+
+    try {
+      return await request;
+    } finally {
+      inFlightProfileRequests.delete(key);
+    }
+  },
+  clearProfileCache: () => {
+    profileCache.clear();
+    inFlightProfileRequests.clear();
+  },
+  prefetchProfiles: async (usernames: string[]): Promise<void> => {
+    await Promise.all(usernames.map((username) => profileAPI.getProfile(username)));
   },
 };
 

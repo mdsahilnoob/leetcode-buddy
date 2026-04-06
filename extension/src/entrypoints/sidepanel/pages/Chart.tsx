@@ -1,5 +1,5 @@
 import { CartesianGrid, Line, LineChart, XAxis, Customized } from "recharts";
-import { useCallback, useState, useEffect } from "react";
+import { useCallback, useState, useEffect, useMemo } from "react";
 import {
   Card,
   CardContent,
@@ -15,7 +15,7 @@ import {
 } from "@/components/ui/chart";
 import { Badge } from "@/components/ui/badge";
 import { TrendingUp, ArrowLeft } from "lucide-react";
-import { profileAPI } from '@/services/api';
+import { profileAPI, type UserStats } from '@/services/api';
 
 const chartConfig = {
   user1: {
@@ -34,28 +34,31 @@ interface PartialLineChartProps {
 }
 
 export function PartialLineChart({ profile1, profile2 }: PartialLineChartProps) {
-  const chartData = [
-    { 
-      difficulty: "Easy", 
-      user1: profile1.easy, 
-      user2: profile2.easy 
-    },
-    { 
-      difficulty: "Medium", 
-      user1: profile1.medium, 
-      user2: profile2.medium 
-    },
-    { 
-      difficulty: "Hard", 
-      user1: profile1.hard, 
-      user2: profile2.hard 
-    },
-    { 
-      difficulty: "Total", 
-      user1: profile1.solved, 
-      user2: profile2.solved 
-    },
-  ];
+  const chartData = useMemo(
+    () => [
+      {
+        difficulty: "Easy",
+        user1: profile1.easy,
+        user2: profile2.easy
+      },
+      {
+        difficulty: "Medium",
+        user1: profile1.medium,
+        user2: profile2.medium
+      },
+      {
+        difficulty: "Hard",
+        user1: profile1.hard,
+        user2: profile2.hard
+      },
+      {
+        difficulty: "Total",
+        user1: profile1.solved,
+        user2: profile2.solved
+      }
+    ],
+    [profile1.easy, profile1.medium, profile1.hard, profile1.solved, profile2.easy, profile2.medium, profile2.hard, profile2.solved]
+  );
 
   const [DasharrayCalculator, lineDasharrays] = useDynamicDasharray({
     splitIndex: chartData.length - 1,
@@ -249,42 +252,57 @@ interface ChartProps {
   user1: string;
   user2: string;
   onBack: () => void;
+  initialProfile1?: UserStats | null;
+  initialProfile2?: UserStats | null;
 }
 
-interface UserStats {
-  username: string;
-  solved: number;
-  easy: number;
-  medium: number;
-  hard: number;
-  ranking: number;
-}
-
-export default function Chart({ user1, user2, onBack }: ChartProps) {
-  const [profile1, setProfile1] = useState<UserStats | null>(null);
-  const [profile2, setProfile2] = useState<UserStats | null>(null);
-  const [loading, setLoading] = useState(true);
+export default function Chart({ user1, user2, onBack, initialProfile1 = null, initialProfile2 = null }: ChartProps) {
+  const [profile1, setProfile1] = useState<UserStats | null>(initialProfile1);
+  const [profile2, setProfile2] = useState<UserStats | null>(initialProfile2);
+  const [loading, setLoading] = useState(!(initialProfile1 && initialProfile2));
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const hasPrefetchedMatch =
+      initialProfile1?.username?.toLowerCase() === user1.toLowerCase() &&
+      initialProfile2?.username?.toLowerCase() === user2.toLowerCase();
+
+    if (hasPrefetchedMatch) {
+      setProfile1(initialProfile1);
+      setProfile2(initialProfile2);
+      setLoading(false);
+      setError(null);
+      return;
+    }
+
+    let isCancelled = false;
+
     const fetchProfiles = async () => {
       try {
         setLoading(true);
+        setError(null);
         const [data1, data2] = await Promise.all([
           profileAPI.getProfile(user1),
           profileAPI.getProfile(user2)
         ]);
+        if (isCancelled) return;
         setProfile1(data1);
         setProfile2(data2);
       } catch (err) {
+        if (isCancelled) return;
         setError(err instanceof Error ? err.message : 'Failed to fetch profiles');
       } finally {
+        if (isCancelled) return;
         setLoading(false);
       }
     };
 
     fetchProfiles();
-  }, [user1, user2]);
+
+    return () => {
+      isCancelled = true;
+    };
+  }, [initialProfile1, initialProfile2, user1, user2]);
 
   if (loading) {
     return (
