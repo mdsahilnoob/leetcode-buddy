@@ -50,14 +50,12 @@ const buildMonthlyCumulativeTrend = ({ username, solved }: ProfileSnapshot): num
     return Array.from({ length: MONTHS.length }, () => 0);
   }
 
-  // Baseline shape: slower start, faster growth in later months.
   const baselineWeights = [0.6, 0.65, 0.7, 0.76, 0.82, 0.9, 1, 1.08, 1.16, 1.26, 1.36, 1.5];
   const seed = hashString(`${username}:${totalSolved}`);
 
   const weightedByMonth = baselineWeights.map((weight, index) => {
-    // Deterministic per-user perturbation to avoid identical curves.
     const monthSeed = ((seed >>> (index % 16)) + index * 31) % 1000;
-    const variation = 0.88 + (monthSeed / 1000) * 0.24; // 0.88..1.12
+    const variation = 0.88 + (monthSeed / 1000) * 0.24;
     return weight * variation;
   });
 
@@ -87,9 +85,7 @@ const buildMonthlyCumulativeTrend = ({ username, solved }: ProfileSnapshot): num
   return cumulative;
 };
 
-// Generate chart data using real API data
 const generateChartData = async (username1: string, username2: string): Promise<ChartData> => {
-  // Fetch real data for both users
   const [user1Data, user2Data] = await Promise.all([
     scrapeLeetCodeProfile(username1),
     scrapeLeetCodeProfile(username2),
@@ -142,7 +138,6 @@ const generateChartData = async (username1: string, username2: string): Promise<
   };
 };
 
-// Get chart data for comparison
 router.get('/chart-data', optionalAuth, async (req, res) => {
   const { user1, user2 } = req.query;
 

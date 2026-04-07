@@ -56,7 +56,7 @@ export async function scrapeLeetCodeProfile(username: string): Promise<LeetCodeS
     return {
       username: matchedUser.username,
       solved: allCount,
-      streak: 0, // API doesn't provide streak, keep as 0 for now
+      streak: 0,
       acceptanceRate: allCount > 0 ? Math.floor((allCount / (allCount + 100)) * 100) : 0,
       easy: easyCount,
       medium: mediumCount,

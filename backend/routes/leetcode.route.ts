@@ -14,7 +14,6 @@ interface LeetCodeStats {
   hard: number;
 }
 
-// Compare two LeetCode profiles (protected route)
 router.post('/compare', authenticateToken, async (req, res) => {
   const { username1, username2 } = req.body;
 

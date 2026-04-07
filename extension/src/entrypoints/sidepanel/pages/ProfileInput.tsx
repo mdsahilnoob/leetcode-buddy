@@ -27,7 +27,6 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
     setError(null);
 
     try {
-      // Validate both usernames exist
       const [profile1, profile2] = await Promise.all([
         profileAPI.getProfile(trimmedUser1),
         profileAPI.getProfile(trimmedUser2)
@@ -44,7 +43,6 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
   return (
     <div className="h-screen bg-[#0d1117] p-4">
       <div className="h-full flex flex-col justify-center">
-        {/* Header */}
         <div className="text-center mb-6">
           <h1 className="text-xl font-bold text-white mb-1">
             Compare Profiles
@@ -54,10 +52,8 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
           </p>
         </div>
 
-        {/* Input Form */}
         <div className="bg-[#161b22] border border-[#30363d] rounded-lg p-5">
           <form onSubmit={handleSubmit} className="space-y-6">
-            {/* User 1 Input */}
             <div className="space-y-2">
               <label htmlFor="user1" className="block text-sm font-medium text-[#c9d1d9]">
                 <span className="flex items-center gap-2">
@@ -78,7 +74,6 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
               />
             </div>
 
-            {/* VS Divider */}
             <div className="flex items-center justify-center py-2">
               <div className="flex-1 h-px bg-[#30363d]"></div>
               <span className="px-4 text-xl font-bold text-[#8b949e]">
@@ -87,7 +82,6 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
               <div className="flex-1 h-px bg-[#30363d]"></div>
             </div>
 
-            {/* User 2 Input */}
             <div className="space-y-2">
               <label htmlFor="user2" className="block text-sm font-medium text-[#c9d1d9]">
                 <span className="flex items-center gap-2">
@@ -108,7 +102,6 @@ export default function ProfileInput({ onCompare }: ProfileInputProps) {
               />
             </div>
 
-            {/* Submit Button */}
             <button
               type="submit"
               disabled={!user1 || !user2 || loading}

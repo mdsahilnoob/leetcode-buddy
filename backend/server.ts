@@ -20,7 +20,6 @@ app.use(cors({
       return callback(null, true);
     }
     
-    // In production, allow chrome-extension:// and https:// origins
     if (origin.startsWith('chrome-extension://') || origin.startsWith('https://')) {
       return callback(null, true);
     }
@@ -32,7 +31,6 @@ app.use(cors({
 
 app.use(express.json());
 
-// Routes
 app.use('/api', leetcodeRoutes);
 app.use('/api', profileRoutes);
 app.use('/api', historyRoutes);
@@ -56,10 +54,8 @@ app.get('/', (req, res) => {
   });
 });
 
-// Export for Vercel serverless
 export default app;
 
-// Local development server
 if (process.env.NODE_ENV !== 'production') {
   app.listen(config.port, () => {
     console.log(`LeetCode Buddy API running on http://localhost:${config.port}`);

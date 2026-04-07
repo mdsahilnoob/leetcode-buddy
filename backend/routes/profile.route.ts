@@ -16,7 +16,6 @@ interface ProfileData {
   reputation?: number;
 }
 
-// Get single user profile (public - no auth required)
 router.get('/profile/:username', async (req, res) => {
   const { username } = req.params;
 

@@ -11,10 +11,8 @@ interface Comparison {
   comparedBy: string;
 }
 
-// In-memory storage for comparison history (replace with database)
 const comparisonHistory = new Map<string, Comparison[]>();
 
-// Get user's comparison history
 router.get('/history', authenticateToken, async (req, res) => {
   const userId = req.user?.userId;
 
@@ -26,7 +24,6 @@ router.get('/history', authenticateToken, async (req, res) => {
   res.json({ history });
 });
 
-// Save comparison to history
 router.post('/history', authenticateToken, async (req, res) => {
   const { user1, user2 } = req.body;
   const userId = req.user?.userId;
@@ -51,7 +48,6 @@ router.post('/history', authenticateToken, async (req, res) => {
   const userHistory = comparisonHistory.get(userId) || [];
   userHistory.unshift(comparison);
   
-  // Keep only last 50 comparisons
   if (userHistory.length > 50) {
     userHistory.pop();
   }
@@ -64,7 +60,6 @@ router.post('/history', authenticateToken, async (req, res) => {
   });
 });
 
-// Delete comparison from history
 router.delete('/history/:id', authenticateToken, async (req, res) => {
   const { id } = req.params;
   const userId = req.user?.userId;
@@ -80,7 +75,6 @@ router.delete('/history/:id', authenticateToken, async (req, res) => {
   res.json({ message: 'Comparison deleted from history' });
 });
 
-// Clear all history
 router.delete('/history', authenticateToken, async (req, res) => {
   const userId = req.user?.userId;
 

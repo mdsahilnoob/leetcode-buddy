@@ -128,7 +128,6 @@ export const historyAPI = {
     return response.json();
   },
 
-  // Save comparison to history (requires auth)
   saveToHistory: async (user1: string, user2: string) => {
     const token = await getToken();
     if (!token) throw new Error('Authentication required');
@@ -146,7 +145,6 @@ export const historyAPI = {
     return response.json();
   },
 
-  // Delete comparison from history (requires auth)
   deleteFromHistory: async (id: string) => {
     const token = await getToken();
     if (!token) throw new Error('Authentication required');
@@ -162,7 +160,6 @@ export const historyAPI = {
     return response.json();
   },
 
-  // Clear all history (requires auth)
   clearHistory: async () => {
     const token = await getToken();
     if (!token) throw new Error('Authentication required');
@@ -178,21 +175,3 @@ export const historyAPI = {
     return response.json();
   },
 };
-
-// Example usage in components:
-
-/*
-// Login component
-import { authAPI } from './api/service';
-
-const handleLogin = async () => {
-  try {
-    const { token, user } = await authAPI.loginWithGoogle();
-    console.log('Logged in:', user);
-    // Navigate to next page
-  } catch (error) {
-    console.error('Login failed:', error);
-  }
-};
-};
-*/
