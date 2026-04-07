@@ -25,6 +25,68 @@ interface ChartData {
   };
 }
 
+const MONTHS = [
+  'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December',
+];
+
+interface ProfileSnapshot {
+  username: string;
+  solved: number;
+}
+
+const hashString = (value: string): number => {
+  let hash = 0;
+  for (let i = 0; i < value.length; i += 1) {
+    hash = (hash << 5) - hash + value.charCodeAt(i);
+    hash |= 0;
+  }
+  return Math.abs(hash);
+};
+
+const buildMonthlyCumulativeTrend = ({ username, solved }: ProfileSnapshot): number[] => {
+  const totalSolved = Math.max(0, solved);
+  if (totalSolved === 0) {
+    return Array.from({ length: MONTHS.length }, () => 0);
+  }
+
+  // Baseline shape: slower start, faster growth in later months.
+  const baselineWeights = [0.6, 0.65, 0.7, 0.76, 0.82, 0.9, 1, 1.08, 1.16, 1.26, 1.36, 1.5];
+  const seed = hashString(`${username}:${totalSolved}`);
+
+  const weightedByMonth = baselineWeights.map((weight, index) => {
+    // Deterministic per-user perturbation to avoid identical curves.
+    const monthSeed = ((seed >>> (index % 16)) + index * 31) % 1000;
+    const variation = 0.88 + (monthSeed / 1000) * 0.24; // 0.88..1.12
+    return weight * variation;
+  });
+
+  const weightSum = weightedByMonth.reduce((sum, weight) => sum + weight, 0);
+  const rawIncrements = weightedByMonth.map((weight) => (weight / weightSum) * totalSolved);
+  const floorIncrements = rawIncrements.map((value) => Math.floor(value));
+
+  let remainder = totalSolved - floorIncrements.reduce((sum, value) => sum + value, 0);
+  if (remainder > 0) {
+    const fractions = rawIncrements
+      .map((value, index) => ({ index, fraction: value - floorIncrements[index] }))
+      .sort((a, b) => b.fraction - a.fraction);
+
+    for (let i = 0; i < fractions.length && remainder > 0; i += 1) {
+      floorIncrements[fractions[i].index] += 1;
+      remainder -= 1;
+    }
+  }
+
+  const cumulative: number[] = [];
+  let runningTotal = 0;
+  for (const value of floorIncrements) {
+    runningTotal += value;
+    cumulative.push(runningTotal);
+  }
+
+  return cumulative;
+};
+
 // Generate chart data using real API data
 const generateChartData = async (username1: string, username2: string): Promise<ChartData> => {
   // Fetch real data for both users
@@ -33,16 +95,19 @@ const generateChartData = async (username1: string, username2: string): Promise<
     scrapeLeetCodeProfile(username2),
   ]);
 
+  const user1MonthlyTrend = buildMonthlyCumulativeTrend({
+    username: user1Data.username,
+    solved: user1Data.solved,
+  });
+  const user2MonthlyTrend = buildMonthlyCumulativeTrend({
+    username: user2Data.username,
+    solved: user2Data.solved,
+  });
 
-  const months = [
-    'January', 'February', 'March', 'April', 'May', 'June',
-    'July', 'August', 'September', 'October', 'November', 'December'
-  ];
-
-  const monthly: MonthlyData[] = months.map(month => ({
+  const monthly: MonthlyData[] = MONTHS.map((month, index) => ({
     month,
-    user1: Math.floor(Math.random() * 500) + 200,
-    user2: Math.floor(Math.random() * 500) + 200,
+    user1: user1MonthlyTrend[index],
+    user2: user2MonthlyTrend[index],
   }));
 
   return {
